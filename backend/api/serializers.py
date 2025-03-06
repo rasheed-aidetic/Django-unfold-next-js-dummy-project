@@ -121,3 +121,40 @@ class UserCreateErrorSerializer(serializers.Serializer):
     password_retype = serializers.ListSerializer(
         child=serializers.CharField(), required=False
     )
+
+
+
+from .models import Category, Post, Comment
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'slug', 'created_at']
+
+class CommentSerializer(serializers.ModelSerializer):
+    author_name = serializers.CharField(source='author.username', read_only=True)
+    
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'author', 'author_name', 'created_at']
+        read_only_fields = ['author']
+
+class PostListSerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source='category.name', read_only=True)
+    author_name = serializers.CharField(source='author.username', read_only=True)
+    comment_count = serializers.IntegerField(source='comments.count', read_only=True)
+    
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'slug', 'category', 'category_name', 
+                 'author', 'author_name', 'created_at', 'comment_count']
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
+    author_name = serializers.CharField(source='author.username', read_only=True)
+    
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'slug', 'content', 'category', 
+                 'author', 'author_name', 'created_at', 'updated_at', 'comments']

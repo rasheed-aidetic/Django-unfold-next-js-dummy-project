@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from .serializers import (
@@ -99,3 +99,56 @@ class UserViewSet(
     def delete_account(self, request, *args, **kwargs):
         self.request.user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+# backend/api/blog/views.py
+from rest_framework import permissions
+# from rest_framework.decorators import action
+# from rest_framework.response import Response
+from .models import Category, Post, Comment
+from .serializers import (
+    CategorySerializer, PostListSerializer, 
+    PostDetailSerializer, CommentSerializer
+)
+
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    lookup_field = 'slug'
+
+class PostViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Post.objects.all().order_by("id")
+    lookup_field = 'slug'
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return PostDetailSerializer
+        return PostListSerializer
+    
+    @extend_schema(
+        responses={
+            201: CommentSerializer,
+            400: None
+        }
+    )
+    @action(["post"], detail=True, url_path="comments")
+    def comment(self, request, slug=None):
+        post = self.get_object()
+        serializer = CommentSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save(author=request.user, post=post)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        return Comment.objects.filter(post__slug=self.kwargs['post_slug'])
+    
+    def perform_create(self, serializer):
+        post = Post.objects.get(slug=self.kwargs['post_slug'])
+        serializer.save(author=self.request.user, post=post)

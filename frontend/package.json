@@ -4,6 +4,7 @@
   "private": true,
   "sideEffects": false,
   "dependencies": {
+    "daisyui": "^4.12.23",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^2.6.0"

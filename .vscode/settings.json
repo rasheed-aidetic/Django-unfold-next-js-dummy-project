@@ -8,7 +8,7 @@
     "tamasfe.even-better-toml",
     "charliermarsh.ruff"
   ],
-  "editor.formatOnSave": true,
+  // "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "quickfix.biome": "explicit",
     "source.organizeImports.biome": "explicit"

@@ -10,6 +10,8 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise'
 export { OpenAPI } from './core/OpenAPI'
 export type { OpenAPIConfig } from './core/OpenAPI'
 
+export type { BlogPostList } from './models/BlogPost'
+export type { PostCommentError } from './models/PostCommentError'
 export type { PatchedUserCurrent } from './models/PatchedUserCurrent'
 export type { TokenObtainPair } from './models/TokenObtainPair'
 export type { TokenRefresh } from './models/TokenRefresh'

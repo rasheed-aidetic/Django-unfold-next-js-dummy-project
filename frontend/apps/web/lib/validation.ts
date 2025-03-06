@@ -47,10 +47,17 @@ const changePasswordFormSchema = z
     path: ['passwordRetype']
   })
 
+
+  const postCommentFormSchema = z.object({
+    content: z.string(),
+    post_slug : z.string()
+  })
+
 export {
   changePasswordFormSchema,
   deleteAccountFormSchema,
   loginFormSchema,
   profileFormSchema,
-  registerFormSchema
+  registerFormSchema,
+  postCommentFormSchema
 }

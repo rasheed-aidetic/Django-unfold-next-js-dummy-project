@@ -39,6 +39,11 @@ export function PagesOverview() {
               Profile
             </Link>
           </li>
+          <li>
+            <Link href="/blog-posts" className="text-purple-600 underline">
+              Blog Posts
+            </Link>
+          </li>
 
           <li>
             <Link href="/change-password" className="text-purple-600 underline">
