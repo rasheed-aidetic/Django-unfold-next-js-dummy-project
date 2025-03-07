@@ -40,7 +40,7 @@ export default function BlogPostsTable({
     <div className="p-6">
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <thead className="text-xs text-white uppercase bg-purple-700">
             <tr>
               <th className="px-4 py-3">ID</th>
               <th className="px-4 py-3">Title</th>
@@ -54,21 +54,32 @@ export default function BlogPostsTable({
             {posts.map((post) => (
               <tr 
                 key={post.id} 
-                className="border-b hover:bg-gray-100 cursor-pointer"
+                className="border-b hover:bg-purple-50 cursor-pointer"
               >
                 <td className="px-4 py-3">{post.id}</td>
                 <td className="px-4 py-3">
                   <Link 
                     href={`/blog-posts/${post.slug}`} 
-                    className="hover:text-blue-600 hover:underline"
+                    className="text-purple-600 hover:text-purple-800 hover:underline"
                   >
                     {post.title}
                   </Link>
                 </td>
-                <td className="px-4 py-3">{post.category_name}</td>
+                <td className="px-4 py-3">
+                  <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
+                    {post.category_name}
+                  </span>
+                </td>
                 <td className="px-4 py-3">{post.author_name}</td>
                 <td className="px-4 py-3">{new Date(post.created_at).toLocaleDateString()}</td>
-                <td className="px-4 py-3">{post.comment_count}</td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                    </svg>
+                    {post.comment_count}
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -80,7 +91,7 @@ export default function BlogPostsTable({
           {prevPage && (
             <button 
               onClick={() => handlePageChange(currentPage - 1)}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors duration-200 shadow-sm"
             >
               Previous
             </button>
@@ -88,7 +99,7 @@ export default function BlogPostsTable({
           {nextPage && (
             <button 
               onClick={() => handlePageChange(currentPage + 1)}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors duration-200 shadow-sm"
             >
               Next
             </button>
@@ -102,8 +113,8 @@ export default function BlogPostsTable({
               onClick={() => handlePageChange(index + 1)}
               className={`px-3 py-1 rounded ${
                 currentPage === index + 1 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-purple-600 text-white' 
+                  : 'bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors duration-200'
               }`}
             >
               {index + 1}

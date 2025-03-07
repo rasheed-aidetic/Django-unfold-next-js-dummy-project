@@ -13,23 +13,31 @@ import { z } from 'zod';
 
 export type CommentFormSchema = z.infer<typeof postCommentFormSchema>
 
+export interface Comment {
+  id: number;
+  author_name: string;
+  content: string;
+  created_at: string;
+}
+
 export default function CommentForm({ 
   postSlug, 
-  onSubmitHandler 
+  onSubmitHandler,
+  onCommentAdded
 }: { 
   postSlug: string, 
-  onSubmitHandler: typeof postCommentAction 
+  onSubmitHandler: typeof postCommentAction,
+  onCommentAdded?: (comment: Comment) => void
 }) {
   const [success, setSuccess] = useState<boolean>(false);
 
-  const { formState, handleSubmit, register, setError } = 
+  const { formState, handleSubmit, register, setError, reset } = 
     useForm<CommentFormSchema>({
       resolver: zodResolver(postCommentFormSchema),
       defaultValues: async () => {
-
         return {
-          content : '',
-          post_slug : postSlug
+          content: '',
+          post_slug: postSlug
         }
     }});
 
@@ -52,6 +60,26 @@ export default function CommentForm({
             fieldApiError('comment', 'content', res, setError);
           } else {
             setSuccess(true);
+            // Reset form after successful submission
+            reset();
+            
+            // If onCommentAdded callback provided, call it with the new comment
+            if (onCommentAdded) {
+              // Create a mock comment with current data
+              // You might need to adjust this based on your actual data structure
+              const newComment: Comment = {
+                id: Date.now(), // Temporary ID
+                author_name: "You", // Or get from session if available
+                content: data.content,
+                created_at: new Date().toISOString()
+              };
+              onCommentAdded(newComment);
+            }
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+              setSuccess(false);
+            }, 3000);
           }
         })}
       >
