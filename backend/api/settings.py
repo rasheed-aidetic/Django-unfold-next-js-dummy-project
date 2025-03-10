@@ -27,6 +27,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 ######################################################################
 INSTALLED_APPS = [
     "unfold",
+    "unfold.contrib.import_export",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_spectacular",
     "api",
+    "import_export"
 ]
 
 ######################################################################
@@ -144,8 +146,8 @@ REST_FRAMEWORK = {
 # Unfold
 ######################################################################
 UNFOLD = {
-    "SITE_HEADER": _("Turbo Admin"),
-    "SITE_TITLE": _("Turbo Admin"),
+    "SITE_HEADER": _("Blog Admin"),
+    "SITE_TITLE": _("Blog Admin"),
     "SIDEBAR": {
         "show_search": True,
         "show_all_applications": True,
